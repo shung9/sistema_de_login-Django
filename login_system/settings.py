@@ -44,6 +44,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # falta instalar o aplicativo no teu caso authentication
+    # 'authentication',
+    # quando vais criar um outro aplicativo é preciso instalar o app
 ]
 
 MIDDLEWARE = [
@@ -61,7 +64,8 @@ ROOT_URLCONF = 'login_system.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ["templates"],
+        # para personalizar o directory path
+        'DIRS': ['BASE_DIR / 'templatzs'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -125,7 +129,21 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
+    #com a nova versão de django podes usar tambem
+    # BASE_DIR / 'static'
+    
 ]
+# Para poder gerir as imagens em local host podes usar esse hack 
+# MEDIA_URL = '/media/'
+
+# MEDIA_ROOT = BASE_DIR / 'media'
+
+# o codigo para colocar no urls.py so no aplicativo principal
+#code;
+     # from django.conf.urls.static import static
+     # from . import settings
+     # if settings.DEBUG:
+         # urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
 # Default primary key field type
