@@ -16,6 +16,10 @@ def home(request):
     return render(request, "authentication/index.html")
 
 def signup(request):
+    # evitar que o usuário conectado acessa na página signup
+    # if request.user.is_authenticated:
+        # return redirect('home')
+    
     if request.method == "POST":
         username = request.POST['username']
         fname = request.POST['fname']
@@ -24,15 +28,15 @@ def signup(request):
         pass1 = request.POST['pass1']
         pass2 = request.POST['pass2']
         
-        if User.objects.filter(username=username):
+        if User.objects.filter(username=username).exists():
             messages.error(request, "Esse nome de usuário já existe! Por favor, tente um outro nome")
             return redirect('home')
         
-        if User.objects.filter(email=email):
+        if User.objects.filter(email=email).exists():
             messages.error(request, "Este email já está registrado!")
             return redirect('home')
         
-        if len(username)>10:
+        if len(username) >10:
             messages.error(request, "O nome de usuário deve ter menos de 10 carácteres")
             
         if pass1 != pass2:
@@ -80,21 +84,31 @@ def signup(request):
         
     return render(request, "authentication/signup.html")
 
+#a página de login
 def signin(request):
+     # fazer que o usuário conectado acessa
     
     if request.method == "POST":
         username = request.POST['username']
         pass1 = request.POST['pass1']
         
-        user = authenticate(username=username, password=pass1)
-        
-        if user is not None:
-            login(request, user)
-            fname = user.first_name
-            return render(request, "authentication/index.html", {'fname': fname})
+        #se username e pass1 == true continua
+        if username or pass1:
+            #poded verificar também se o usuário exists
+            # if Use.objects.filter(username=username).exists():
+            # continua a logica
+            user = authenticate(username=username, password=pass1)
             
+            if user is not None:
+                login(request, user)
+                fname = user.first_name
+                return render(request, "authentication/index.html", {'fname': fname})
+            
+            else:
+                messages.error(request, "Informações Erradas!")
+                return redirect("home")
         else:
-            messages.error(request, "Informações Erradas!")
+            messages.error(request, "todos os campos abaixo sao necessário")
             return redirect("home")
     
     return render(request, "authentication/signin.html")
