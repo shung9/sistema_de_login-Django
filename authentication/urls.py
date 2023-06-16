@@ -1,4 +1,5 @@
 from django.contrib import admin
+# o include nao é necessário aqui, ja fizeste o import dos views
 from django.urls import path, include
 from . import views
 
